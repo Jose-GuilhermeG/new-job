@@ -1,10 +1,9 @@
+from account.serializers import RegisterUserSerializer
+from core.utils import get_access_refresh_token
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
-
-from account.serializers import RegisterUserSerializer
-from core.utils import get_access_refresh_token
 
 USER = get_user_model()
 

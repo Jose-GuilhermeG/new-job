@@ -6,9 +6,12 @@ USER = get_user_model()
 class RegisterUserSerializer(
     serializers.ModelSerializer
 ):
+    email = serializers.EmailField(allow_blank=False)
+    
     class Meta:
         model = USER
         fields = ["username" , "email" , "password"]
+        
 
     def create(self, validated_data : dict):
         return USER.objects.create_user(**validated_data)
