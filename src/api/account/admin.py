@@ -1,7 +1,7 @@
+from account.models import Profile
+from core.admin import BaseAdmin
 from django.contrib import admin
 
-from core.admin import BaseAdmin
-from account.models import Profile
 
 # Register your models here.
 @admin.register(Profile)
