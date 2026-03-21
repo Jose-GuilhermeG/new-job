@@ -3,6 +3,7 @@ from core.models import BaseModel
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from job.models import Skill
 
 USER = get_user_model()
 
@@ -56,6 +57,13 @@ class Profile(
         related_name="profile"
     )
 
+    skills = models.ManyToManyField(
+        verbose_name=_("User skills"),
+        to=Skill,
+        related_name="profiles",
+        through="ProfileSkill"
+    )
+
     def __str__(self):
         return f"{self.user.username} - profile"
 
@@ -64,3 +72,13 @@ class Profile(
         verbose_name = _("User Profile")
         verbose_name_plural = _("Users Profiles")
         ordering = ['created_at']
+
+class ProfileSkill(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.profile.name} - {self.skill.name}"
+
+    class Meta:
+        unique_together = ("profile", "skill")

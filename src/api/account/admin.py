@@ -1,4 +1,4 @@
-from account.models import Profile
+from account.models import Profile, ProfileSkill
 from core.admin import BaseAdmin
 from django.contrib import admin
 
@@ -7,3 +7,7 @@ from django.contrib import admin
 @admin.register(Profile)
 class ProfileAdmin(BaseAdmin):
     list_display = ['user' , "name"]
+
+@admin.register(ProfileSkill)
+class ProfileSkillAdmin(admin.ModelAdmin):
+    pass

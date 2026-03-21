@@ -1,6 +1,10 @@
 from account.models import Profile
-from account.permissions import IsProfileOwner
-from account.serializers import ProfileSerializer, RegisterUserSerializer
+from account.permissions import IsAuthenticated, IsProfileOwner
+from account.serializers import (
+    ProfileSerializer,
+    ProfileUpdateSerializer,
+    RegisterUserSerializer,
+)
 from core.utils import get_access_refresh_token
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -35,6 +39,7 @@ class ProfileDetailView(
     permission_per_method = {
         "PUT" : IsProfileOwner
     }
+    permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
         permission = self.permission_per_method.get(self.request.method)
@@ -42,6 +47,13 @@ class ProfileDetailView(
             return [permission()]
 
         return super().get_permissions()
+
+    def get_serializer_class(self):
+        serializers = {
+            "PUT" : ProfileUpdateSerializer,
+            "PATCH" : ProfileUpdateSerializer
+        }
+        return serializers.get(self.request.method, super().get_serializer_class())
 
     def get_object(self):
         username = self.kwargs.get("username")

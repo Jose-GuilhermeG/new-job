@@ -1,5 +1,4 @@
 from django.urls import path
-
 from job import views
 
 urlpatterns = [
@@ -7,5 +6,5 @@ urlpatterns = [
         'skills/',
         views.SkillListCreateView.as_view(),
         name="skils"
-    )    
+    )
 ]

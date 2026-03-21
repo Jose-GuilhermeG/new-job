@@ -1,9 +1,9 @@
-from rest_framework.generics import ListCreateAPIView , RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
-
+from job.filters import SkillFilter
 from job.models import Skill
 from job.serializers import SkillSerializer
-from job.filters import SkillFilter
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.permissions import IsAuthenticated
+
 
 # Create your views here.
 class SkillListCreateView(
