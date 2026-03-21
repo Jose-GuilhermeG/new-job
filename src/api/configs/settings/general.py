@@ -25,6 +25,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS" , default=["*"])
 PROJECT_APPS = [
     'core',
     'account',
+    'job'
 ]
 
 TRHIRD_PARTY_APPS = [
