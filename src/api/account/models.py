@@ -33,7 +33,7 @@ class Profile(
 
     photo = models.ImageField(
         verbose_name=_("User profile photo"),
-        upload_to="users/profile/image/%Y/%m/",
+        upload_to="media/users/profile/image/%Y/%m/",
         blank=True,
         null=True
     )
