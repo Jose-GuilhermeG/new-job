@@ -1,9 +1,12 @@
 from django.urls import path
+from job import views
 from rest_framework.routers import SimpleRouter
 
-from job import views
+job_enrollment = views.JobEnrollmetViewSet.as_view({"get" : "list" , "post" : "create"})
+job_enrollment_detail = views.JobEnrollmetViewSet.as_view({"get" : "retrieve" , "put" : "update" , "patch" : "partial_update" , "delete" : "destroy"})
 
 router = SimpleRouter()
+
 router.register(
     "jobs",
     views.JobOpeningViewSet,
@@ -15,7 +18,17 @@ urlpatterns = [
         'skills/',
         views.SkillListCreateView.as_view(),
         name="skils"
-    )
+    ),
+    path(
+        "jobs/<int:job_id>/enrollments/",
+        job_enrollment,
+        name="job-enrollment"
+    ),
+    path(
+        "jobs/<int:job_id>/enrollments/<int:pk>",
+        job_enrollment_detail,
+        name="job-enrollment-detail"
+    ),
 ]
 
 urlpatterns += router.urls

@@ -4,12 +4,14 @@ from account.serializers import (
     ProfileSerializer,
     ProfileUpdateSerializer,
     RegisterUserSerializer,
+    UserEnrollmentsSerializer,
 )
 from core.utils import get_access_refresh_token
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from job.models import JobEnrollment
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 
 USER = get_user_model()
@@ -58,3 +60,13 @@ class ProfileDetailView(
     def get_object(self):
         username = self.kwargs.get("username")
         return get_object_or_404(Profile , user__username = username)
+
+class UserEnrollmentsView(
+    ListAPIView
+):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserEnrollmentsSerializer
+
+    def get_queryset(self):
+        return JobEnrollment.objects.filter(user = self.request.user)

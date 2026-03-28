@@ -1,7 +1,7 @@
 from account.models import Profile
 from django.contrib.auth import get_user_model
-from job.models import Skill
-from job.serializers import SkillSerializer
+from job.models import JobEnrollment, Skill
+from job.serializers import JobOpeningListSerializer, SkillSerializer
 from rest_framework import serializers
 
 USER = get_user_model()
@@ -38,3 +38,11 @@ class ProfileUpdateSerializer(
         queryset=Skill.objects.all(),
         write_only=True
     )
+
+class UserEnrollmentsSerializer(
+    serializers.ModelSerializer
+):
+    job = JobOpeningListSerializer()
+    class Meta:
+        model = JobEnrollment
+        fields = ["id","job"]

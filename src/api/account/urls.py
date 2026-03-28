@@ -17,6 +17,11 @@ urlpatterns = [
         'users/<str:username>/profile/',
         views.ProfileDetailView.as_view(),
         name="profile"
+    ),
+    path(
+        'account/me/enrollments/',
+        views.UserEnrollmentsView.as_view(),
+        name='user-enrollments'
     )
 ]
 

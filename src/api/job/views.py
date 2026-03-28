@@ -1,11 +1,22 @@
+from core.mixins import (
+    ViewSetAddPermissionPerActionMixin,
+    ViewSetGetSerializerClassMixin,
+)
+from django.shortcuts import get_object_or_404
+from job.filters import SkillFilter
+from job.models import JobOpening, Skill
+from job.permissions import isJobEnrollmentOwner
+from job.serializers import (
+    JobEnrollmentSerializer,
+    JobOpeningCreateUpdateSerializer,
+    JobOpeningDetailSerializer,
+    JobOpeningListSerializer,
+    SkillSerializer,
+)
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from job.filters import SkillFilter
-from job.models import Skill , JobOpening
-from job.serializers import SkillSerializer , JobOpeningListSerializer , JobOpeningCreateUpdateSerializer , JobOpeningDetailSerializer
-from core.mixins import ViewSetGetSerializerClassMixin
 
 # Create your views here.
 class SkillListCreateView(
@@ -27,3 +38,27 @@ class JobOpeningViewSet(
         "create" : JobOpeningCreateUpdateSerializer,
         "retrieve" : JobOpeningDetailSerializer
     }
+
+class JobEnrollmetViewSet(
+    ViewSetAddPermissionPerActionMixin,
+    ModelViewSet
+):
+
+    serializer_class = JobEnrollmentSerializer
+    permission_classes = [IsAuthenticated]
+    permission_per_action = {
+        'retrieve' : isJobEnrollmentOwner,
+        'destroy' : isJobEnrollmentOwner,
+        'partial_update' : isJobEnrollmentOwner,
+        'update' : isJobEnrollmentOwner
+    }
+
+    def get_job(self) :
+        job_id = self.kwargs.get("job_id" , None)
+        return get_object_or_404(JobOpening , pk = job_id)
+
+    def get_queryset(self):
+        return self.get_job().enrollments.select_related("user", "user__profile").prefetch_related("user__profile__skills", "job__skills")
+
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user , job = self.get_job())
