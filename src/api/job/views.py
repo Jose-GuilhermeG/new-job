@@ -3,7 +3,7 @@ from core.mixins import (
     ViewSetGetSerializerClassMixin,
 )
 from django.shortcuts import get_object_or_404
-from job.filters import SkillFilter
+from job.filters import JobFilter, SkillFilter
 from job.models import JobOpening, Skill
 from job.permissions import isJobEnrollmentOwner
 from job.serializers import (
@@ -13,7 +13,7 @@ from job.serializers import (
     JobOpeningListSerializer,
     SkillSerializer,
 )
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -62,3 +62,13 @@ class JobEnrollmetViewSet(
 
     def perform_create(self, serializer):
         serializer.save(user = self.request.user , job = self.get_job())
+
+class JobSearchView(
+    ListAPIView
+):
+    serializer_class = JobOpeningListSerializer
+    filterset_class = JobFilter
+
+    def get_queryset(self):
+        query = self.kwargs.get("q")
+        return JobOpening.objects.search(query)

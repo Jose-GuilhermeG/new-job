@@ -1,5 +1,5 @@
 import django_filters as filters
-from job.models import Skill
+from job.models import JobOpening, Skill
 
 
 class SkillFilter(
@@ -10,3 +10,11 @@ class SkillFilter(
     class Meta:
         model = Skill
         fields = ["name"]
+
+class JobFilter(
+    filters.FilterSet
+):
+
+    class Meta:
+        model = JobOpening
+        fields = ["skills","type","location"]

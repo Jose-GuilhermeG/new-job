@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from job.enums import JobLocation, JobType
+from job.objects import JobOpeningManager
 from job.utils import jobs_curriculum_path
 
 USER = get_user_model()
@@ -64,6 +65,8 @@ class JobOpening(
 
     def __str__(self):
         return self.title
+
+    objects = JobOpeningManager()
 
     class Meta:
         db_table = "job_opening"

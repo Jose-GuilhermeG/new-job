@@ -29,6 +29,11 @@ urlpatterns = [
         job_enrollment_detail,
         name="job-enrollment-detail"
     ),
+    path(
+        "jobs/search/<str:q>/",
+        views.JobSearchView.as_view(),
+        name="job-search-view"
+    )
 ]
 
 urlpatterns += router.urls
