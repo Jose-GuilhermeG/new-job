@@ -131,3 +131,9 @@
     @apply font-sans;
     }
 }
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-background);
+     
+}
